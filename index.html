@@ -1,0 +1,684 @@
+<html>
+    <head>
+
+         <center>
+<h1>
+            GP CODE HUB
+            </h1>
+            <h2>CN LAB</h2>
+</center>
+        
+        
+
+    </head>
+    <h1>1 crc </h1>
+    <blockquote id="myInput">
+         #include stdio.h
+        #include string.h
+        char data[100],concatdata[117],src_crc[17],dest_crc[17],frame[120],divident[18];
+                char divisor[18];
+                char res[17]="0000000000000000";
+                
+                void crc_cal(int node)
+                {
+                int i,j;
+                for(j=17;j<=strlen(concatdata);j++)
+                {
+                    if(divident[0]=='1')
+                    {
+                    for(i=1;i<=16;i++)
+                    if(divident[i]!=divisor[i])
+                    divident[i-1]='1';
+                    else
+                    divident[i-1]='0';
+                    }
+                
+                    else
+                    {
+                    for(i=1;i<=16;i++)
+                    divident[i-1]=divident[i];
+                    }
+                    if(node==0)
+                    divident[i-1]=concatdata[j];
+                    else
+                    divident[i-1]=frame[j];
+                }
+                divident[i]='\0';
+                printf("\ncrc is %s\n",divident);
+                if(node==0)
+                {
+                strcpy(src_crc,divident);
+                }
+                else
+                strcpy(dest_crc,divident);
+                }
+                int main()
+                {
+                int i;
+                printf("enter the generator bits\n");
+                gets(divisor);
+                if(strlen(divisor)<17 || strlen(divisor)>17)
+                {
+                printf("please enter the geneartor length min of 17 bits\n");
+                exit(0);
+                }
+                printf("\n At src node :\n Enter the msg to be sent :");
+                gets(data);
+                strcpy(concatdata,data);
+                strcat(concatdata,"0000000000000000");
+                for(i=0;i<=16;i++)
+                divident[i]=concatdata[i];
+                divident[i]='\0';
+                crc_cal(0);
+                printf("\ndata is:\t");
+                puts(data);
+                printf("\n The frame transmitted is :\t");
+                printf("\n%s%s",data,src_crc);
+                printf("\n\t\tSOURCE NODE TRANSMITTED THE FRAME---->");
+                printf("\n\n\n\n\t\t\tAT DESTINATION NODE\nenter the recived frame:\t");
+                gets(frame);
+                for(i=0;i<=16;i++)
+                divident[i]=frame[i];
+                divident[i]='\0';
+                crc_cal(1);
+                if((strcmp(dest_crc,res))==0)
+                printf("\nRecived frame is error free .\n ");
+                else
+                printf("\nRecived frame containes one or more error ");
+                return 1;
+                }
+            </blockquote>
+
+            <button class="k2-copy-button" id="k2button"><svg aria-hidden="true" height="1em" preserveaspectratio="xMidYMid meet" role="img" viewbox="0 0 24 24" width="1em" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g fill="none"><path d="M13 6.75V2H8.75A2.25 2.25 0 0 0 6.5 4.25v13a2.25 2.25 0 0 0 2.25 2.25h9A2.25 2.25 0 0 0 20 17.25V9h-4.75A2.25 2.25 0 0 1 13 6.75z" fill="currentColor"><path d="M14.5 6.75V2.5l5 5h-4.25a.75.75 0 0 1-.75-.75z" fill="currentColor"><path d="M5.503 4.627A2.251 2.251 0 0 0 4 6.75v10.504a4.75 4.75 0 0 0 4.75 4.75h6.494c.98 0 1.813-.626 2.122-1.5H8.75a3.25 3.25 0 0 1-3.25-3.25l.003-12.627z" fill="currentColor"></path></path></path></g></svg>Copy</button>  
+            
+            
+            <style>
+            .k2-copy-button svg{margin-right: 10px;vertical-align: top;}  
+            .k2-copy-button{
+              height: 45px; width: 155px; color: #fff; background: #265df2; outline: none; border: none; border-radius: 8px; font-size: 17px; font-weight: 400; margin: 8px 0; cursor: pointer; transition: all 0.4s ease;}
+            .k2-copy-button:hover{background: #2ECC71;}
+            @media (max-width: 480px) {#k2button{width: 100%;}}
+            </style>
+            
+            
+            <script>
+              function copyFunction() {
+              const copyText = document.getElementById("myInput").textContent;
+              const textArea = document.createElement('textarea');
+              textArea.textContent = copyText;
+              document.body.append(textArea);
+              textArea.select();
+              document.execCommand("copy");
+              k2button.innerText = "Text copied";
+                textArea.remove();
+            }
+            document.getElementById('k2button').addEventListener('click', copyFunction);
+              </script>
+     
+</html>
+   <html>
+    <head>
+        <h1>2 Distance vector algorithm</h1>
+
+        <blockquote id="myInput">#include<stdio.h> 
+            struct rtable 
+            { 	
+            int dist[20],nextnode[20]; 
+            }table[20];
+             int cost[10][10],n; 
+             void distvector() 
+            { 	
+            int i,j,k,count=0; 	
+            for(i=0;i<n;i++) 	
+            { 		
+            for(j=0;j<n;j++) 		
+            { 			
+            table[i].dist[j]=cost[i][j]; 			
+            table[i].nextnode[j]=j; 		
+            } 	}   
+            do   
+            { 	  
+            count=0; 		
+            for(i=0;i<n;i++) 		
+            { 			
+            for(j=0;j<n;j++) 			
+            { 			
+            for(k=0;k<n;k++) 				
+            { 					
+            if(table[i].dist[j]>cost[i][k]+table[k].dist[j]) 			
+            { 						
+            table[i].dist[j]=table[i].dist[k]+table[k].dist[j]; 			
+            table[i].nextnode[j]=k; 								
+            count++; 					
+            } 				
+            } 			
+            } 		
+            } 
+            }while(count!=0); 
+            } 
+            int main() 
+            { 	
+            int i,j; 	
+            printf("\nenter the no of vertices:\t"); 
+            scanf("%d",&n); 
+            printf("\nenter the cost matrix\n"); 	
+            for(i=0;i<n;i++) 			
+            for(j=0;j<n;j++) 				
+            scanf("%d",&cost[i][j]); 	
+            distvector(); 	
+            for(i=0;i<n;i++) 	
+            { 		
+            printf("\nstate value for router %c \n",i+65);
+            printf("\ndestnode\tnextnode\tdistance\n"); 
+            for(j=0;j<n;j++) 		
+            { 			
+            if(table[i].dist[j]==99) 	
+            printf("%c\t\t-\t\t infinite\n",j+65); 
+            else 				
+            printf("%c\t\t%c\t\t%d\n",j+65,table[i].nextnode[j]+65,table[i].dist[j]); 	
+            }      
+            } 
+            return 0;     
+            
+             }
+            
+        </blockquote>
+        
+        <button class="k2-copy-button" id="k2button"><svg aria-hidden="true" height="1em" preserveaspectratio="xMidYMid meet" role="img" viewbox="0 0 24 24" width="1em" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g fill="none"><path d="M13 6.75V2H8.75A2.25 2.25 0 0 0 6.5 4.25v13a2.25 2.25 0 0 0 2.25 2.25h9A2.25 2.25 0 0 0 20 17.25V9h-4.75A2.25 2.25 0 0 1 13 6.75z" fill="currentColor"><path d="M14.5 6.75V2.5l5 5h-4.25a.75.75 0 0 1-.75-.75z" fill="currentColor"><path d="M5.503 4.627A2.251 2.251 0 0 0 4 6.75v10.504a4.75 4.75 0 0 0 4.75 4.75h6.494c.98 0 1.813-.626 2.122-1.5H8.75a3.25 3.25 0 0 1-3.25-3.25l.003-12.627z" fill="currentColor"></path></path></path></g></svg>Copy</button>  
+        
+        
+        <style>
+        .k2-copy-button svg{margin-right: 10px;vertical-align: top;}  
+        .k2-copy-button{
+          height: 45px; width: 155px; color: #fff; background: #265df2; outline: none; border: none; border-radius: 8px; font-size: 17px; font-weight: 400; margin: 8px 0; cursor: pointer; transition: all 0.4s ease;}
+        .k2-copy-button:hover{background: #2ECC71;}
+        @media (max-width: 480px) {#k2button{width: 100%;}}
+        </style>
+        
+        
+        <script>
+          function copyFunction() {
+          const copyText = document.getElementById("myInput").textContent;
+          const textArea = document.createElement('textarea');
+          textArea.textContent = copyText;
+          document.body.append(textArea);
+          textArea.select();
+          document.execCommand("copy");
+          k2button.innerText = "Text copied";
+            textArea.remove();
+        }
+        document.getElementById('k2button').addEventListener('click', copyFunction);
+          </script>
+    </head>
+   </html>
+
+
+
+<html>
+<head>
+    <h1>3a.server</h1>
+
+    <blockquote id="myInput">#include<stdio.h>
+        #include<sys/types.h>
+        #include<sys/socket.h>
+        #include<netinet/in.h>
+        #include<sys/fcntl.h>
+        #include<stdlib.h>
+        int main(int argc,char *argv[])
+        {
+        int fd,sockfd,newsockfd,clilen,portno,n;
+        struct sockaddr_in seradd,cliadd;
+        char buffer[4096];
+        if(argc<2)
+        {
+        fprintf(stderr,"\n\n No port\n");
+        exit(1);
+        }
+        portno=atoi(argv[1]);
+        sockfd=socket(AF_INET,SOCK_STREAM,0);
+        if(sockfd<0)
+        error("\n error opening socket.\n");
+        bzero((char *)&seradd,sizeof(seradd));
+        seradd.sin_family=AF_INET;
+        seradd.sin_addr.s_addr=(htonl)INADDR_ANY;
+        seradd.sin_port=htons(portno);
+        if(bind(sockfd,(struct sockaddr *)&seradd,sizeof(seradd))<0)
+        perror("\n IP addr cannt bind");
+        listen(sockfd,5);
+        clilen=sizeof(cliadd);
+        printf("\n Server waiting for clint request\n");
+        while(1)
+        {
+        newsockfd=accept(sockfd,(struct sockaddr *)&cliadd,&clilen);
+        if(newsockfd<0)
+        perror("\n Server cannot accept connection request ");
+        bzero(buffer,4096);
+        read(newsockfd,buffer,4096);
+        fd=open(buffer,O_RDONLY);
+        if(fd<0)
+        perror("\n File  doesnot exist");
+        while(1)
+        {
+        n=read(fd,buffer,4096);
+        if(n<=0)
+        exit(0);
+        write(newsockfd,buffer,n);
+        printf("\n File transfer completet\n");
+        }
+        close(fd);
+        close(newsockfd);
+        }
+        return 0;}
+         
+           </blockquote>
+    
+    <button class="k2-copy-button" id="k2button"><svg aria-hidden="true" height="1em" preserveaspectratio="xMidYMid meet" role="img" viewbox="0 0 24 24" width="1em" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g fill="none"><path d="M13 6.75V2H8.75A2.25 2.25 0 0 0 6.5 4.25v13a2.25 2.25 0 0 0 2.25 2.25h9A2.25 2.25 0 0 0 20 17.25V9h-4.75A2.25 2.25 0 0 1 13 6.75z" fill="currentColor"><path d="M14.5 6.75V2.5l5 5h-4.25a.75.75 0 0 1-.75-.75z" fill="currentColor"><path d="M5.503 4.627A2.251 2.251 0 0 0 4 6.75v10.504a4.75 4.75 0 0 0 4.75 4.75h6.494c.98 0 1.813-.626 2.122-1.5H8.75a3.25 3.25 0 0 1-3.25-3.25l.003-12.627z" fill="currentColor"></path></path></path></g></svg>Copy</button>  
+    
+    
+    <style>
+    .k2-copy-button svg{margin-right: 10px;vertical-align: top;}  
+    .k2-copy-button{
+      height: 45px; width: 155px; color: #fff; background: #265df2; outline: none; border: none; border-radius: 8px; font-size: 17px; font-weight: 400; margin: 8px 0; cursor: pointer; transition: all 0.4s ease;}
+    .k2-copy-button:hover{background: #2ECC71;}
+    @media (max-width: 480px) {#k2button{width: 100%;}}
+    </style>
+    
+    
+    <script>
+      function copyFunction() {
+      const copyText = document.getElementById("myInput").textContent;
+      const textArea = document.createElement('textarea');
+      textArea.textContent = copyText;
+      document.body.append(textArea);
+      textArea.select();
+      document.execCommand("copy");
+      k2button.innerText = "Text copied";
+        textArea.remove();
+    }
+    document.getElementById('k2button').addEventListener('click', copyFunction);
+      </script>
+</head>
+</html>
+
+
+<html>
+    <head>
+        <h1>3b.client</h1>
+        <blockquote id="myInput">#include<stdio.h>
+            #include<sys/types.h>
+            #include<sys/socket.h>
+            #include<netinet/in.h>
+            #include<sys/fcntl.h>
+            #include<stdlib.h>
+            #include<string.h>
+            #include<arpa/inet.h>
+            
+            int main(int argc,char *argv[])
+            {
+            int sockfd,portno,n;
+            struct sockaddr_in seradd;
+            char buffer[4096],*serip;
+            if(argc<4)
+            {
+            fprintf(stderr,"usage %s serverip filename port",argv[0]);
+            exit(0);
+            }
+            serip=argv[1];
+            portno=atoi(argv[3]);
+            sockfd=socket(AF_INET,SOCK_STREAM,0);
+            if(sockfd<0)
+            perror("\n Error in creating socket.\n");
+            perror("\n Client on line.");
+            bzero((char *)&seradd,sizeof(seradd));
+            seradd.sin_family=AF_INET;
+            seradd.sin_addr.s_addr=inet_addr(serip);
+            seradd.sin_port=htons(portno);
+            if(connect(sockfd,(struct sockaddr *)&seradd,sizeof(seradd))<0)
+            perror("\n Error in connection setup \n");
+            write(sockfd,argv[2],strlen(argv[2])+1);
+            bzero(buffer,4096);
+            n=read(sockfd,buffer,4096);
+            if(n<=0)
+            {
+            perror("\n File not found");
+            exit(0);
+            }
+            write (1,buffer,n);
+            }
+            
+            
+            
+        </blockquote>
+        
+        <button class="k2-copy-button" id="k2button"><svg aria-hidden="true" height="1em" preserveaspectratio="xMidYMid meet" role="img" viewbox="0 0 24 24" width="1em" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g fill="none"><path d="M13 6.75V2H8.75A2.25 2.25 0 0 0 6.5 4.25v13a2.25 2.25 0 0 0 2.25 2.25h9A2.25 2.25 0 0 0 20 17.25V9h-4.75A2.25 2.25 0 0 1 13 6.75z" fill="currentColor"><path d="M14.5 6.75V2.5l5 5h-4.25a.75.75 0 0 1-.75-.75z" fill="currentColor"><path d="M5.503 4.627A2.251 2.251 0 0 0 4 6.75v10.504a4.75 4.75 0 0 0 4.75 4.75h6.494c.98 0 1.813-.626 2.122-1.5H8.75a3.25 3.25 0 0 1-3.25-3.25l.003-12.627z" fill="currentColor"></path></path></path></g></svg>Copy</button>  
+        
+        
+        <style>
+        .k2-copy-button svg{margin-right: 10px;vertical-align: top;}  
+        .k2-copy-button{
+          height: 45px; width: 155px; color: #fff; background: #265df2; outline: none; border: none; border-radius: 8px; font-size: 17px; font-weight: 400; margin: 8px 0; cursor: pointer; transition: all 0.4s ease;}
+        .k2-copy-button:hover{background: #2ECC71;}
+        @media (max-width: 480px) {#k2button{width: 100%;}}
+        </style>
+        
+        
+        <script>
+          function copyFunction() {
+          const copyText = document.getElementById("myInput").textContent;
+          const textArea = document.createElement('textarea');
+          textArea.textContent = copyText;
+          document.body.append(textArea);
+          textArea.select();
+          document.execCommand("copy");
+          k2button.innerText = "Text copied";
+            textArea.remove();
+        }
+        document.getElementById('k2button').addEventListener('click', copyFunction);
+          </script>
+    </head>
+    <h2>Output:
+        cc client.c
+        ./a.out
+        Client:Hello message sent Hello from server
+        cc server.c
+        ./a.out
+        Server:Hello from client Hello message sent
+        </h2>
+</html>
+
+
+<html>
+    <head>
+<h1>
+4a server
+</h1>
+
+<blockquote id="myInput">#include<stdio.h>
+    #include<stdlib.h>
+    #include<string.h>
+    #include<fcntl.h>
+    #include<sys/types.h>
+    #include<sys/stat.h>
+    #include<unistd.h>
+    #define FIFO1 "fifo1"
+    #define FIFO2 "fifo2"
+    
+    int main()
+    {
+    char p[100],c[5000,ch;
+    int num,fd,fd2,f1;
+    mknod(FIFO1,S_IFIFO|0666,0);
+    mknod(FIFO2,S_IFIFO|0666,0);
+    printf("\n Server online...\n");
+    fd=open(FIFO1,O_RDONLY);
+    fd2=open(FIFO2,O_WRONLY);
+    printf("Server online\n waiting for client \n\n");
+    if((num=read(fd,p,100))==-1)
+    perror("\n Read Error ");
+    else
+    {
+    p[num]='\0';
+    printf("\n File is %s .\n",p);
+    if((f1=open(p,O_RDONLY))<0)
+    {
+    write(fd2,"File not found",15);
+    return 1;
+    }
+    else
+    {
+    stdin=fdopen(f1,"r");
+    num=0;
+    while((ch=fgetc(stdin))!=EOF)
+    c[num++]=ch;
+    c[num]=0;
+    printf(" Server: Transfering the contents of :%s ",p);
+    if(num=write(fd2,c,strlen(c))==-1)
+    printf("\n Error in writting to FIFO\n");
+    else
+    printf("\n File transfer completed \n");
+    }}}
+    
+    
+     
+    
+</blockquote>
+
+<button class="k2-copy-button" id="k2button"><svg aria-hidden="true" height="1em" preserveaspectratio="xMidYMid meet" role="img" viewbox="0 0 24 24" width="1em" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g fill="none"><path d="M13 6.75V2H8.75A2.25 2.25 0 0 0 6.5 4.25v13a2.25 2.25 0 0 0 2.25 2.25h9A2.25 2.25 0 0 0 20 17.25V9h-4.75A2.25 2.25 0 0 1 13 6.75z" fill="currentColor"><path d="M14.5 6.75V2.5l5 5h-4.25a.75.75 0 0 1-.75-.75z" fill="currentColor"><path d="M5.503 4.627A2.251 2.251 0 0 0 4 6.75v10.504a4.75 4.75 0 0 0 4.75 4.75h6.494c.98 0 1.813-.626 2.122-1.5H8.75a3.25 3.25 0 0 1-3.25-3.25l.003-12.627z" fill="currentColor"></path></path></path></g></svg>Copy</button>  
+
+
+<style>
+.k2-copy-button svg{margin-right: 10px;vertical-align: top;}  
+.k2-copy-button{
+  height: 45px; width: 155px; color: #fff; background: #265df2; outline: none; border: none; border-radius: 8px; font-size: 17px; font-weight: 400; margin: 8px 0; cursor: pointer; transition: all 0.4s ease;}
+.k2-copy-button:hover{background: #2ECC71;}
+@media (max-width: 480px) {#k2button{width: 100%;}}
+</style>
+
+
+<script>
+  function copyFunction() {
+  const copyText = document.getElementById("myInput").textContent;
+  const textArea = document.createElement('textarea');
+  textArea.textContent = copyText;
+  document.body.append(textArea);
+  textArea.select();
+  document.execCommand("copy");
+  k2button.innerText = "Text copied";
+    textArea.remove();
+}
+document.getElementById('k2button').addEventListener('click', copyFunction);
+  </script>
+
+
+    </head>
+</html>
+
+<html>
+    <h1>4b client</h1>
+    <head>
+        <blockquote id="myInput">#include<stdio.h>
+            #include<stdlib.h>
+            #include<string.h>
+            #include<fcntl.h>
+            #include<sys/types.h>
+            #include<sys/stat.h>
+            #include<unistd.h>
+            #define FIFO1 "fifo1"
+            #define FIFO2 "fifo2"
+            
+            int main()
+            {
+            char p[100],c[5000];
+            int num,fd,fd2,f1;
+            mknod(FIFO1,S_IFIFO|0666,0);
+            mknod(FIFO2,S_IFIFO|0666,0);
+            printf("\n Client online...\n");
+            fd=open(FIFO1,O_WRONLY);
+            fd2=open(FIFO2,O_RDONLY);
+            printf("Client : Enter the filename . \n\n");
+            scanf("%s",p);
+            num=write(fd,p,strlen(p));
+            if(num==-1)
+            {
+            perror("\nWrite Error.\n");
+            return 1;
+            }
+            else
+            {
+            printf("\n Waiting for reply\n");
+            if((num=read(fd2,c,5000))==-1)
+            perror("\nError while reading from fifo \n");
+            else
+            {
+            c[num]=0;
+            printf("%s",c);
+            }}
+            return 1;
+            }
+            
+            
+            
+        </blockquote>
+        
+        <button class="k2-copy-button" id="k2button"><svg aria-hidden="true" height="1em" preserveaspectratio="xMidYMid meet" role="img" viewbox="0 0 24 24" width="1em" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g fill="none"><path d="M13 6.75V2H8.75A2.25 2.25 0 0 0 6.5 4.25v13a2.25 2.25 0 0 0 2.25 2.25h9A2.25 2.25 0 0 0 20 17.25V9h-4.75A2.25 2.25 0 0 1 13 6.75z" fill="currentColor"><path d="M14.5 6.75V2.5l5 5h-4.25a.75.75 0 0 1-.75-.75z" fill="currentColor"><path d="M5.503 4.627A2.251 2.251 0 0 0 4 6.75v10.504a4.75 4.75 0 0 0 4.75 4.75h6.494c.98 0 1.813-.626 2.122-1.5H8.75a3.25 3.25 0 0 1-3.25-3.25l.003-12.627z" fill="currentColor"></path></path></path></g></svg>Copy</button>  
+        
+        
+        <style>
+        .k2-copy-button svg{margin-right: 10px;vertical-align: top;}  
+        .k2-copy-button{
+          height: 45px; width: 155px; color: #fff; background: #265df2; outline: none; border: none; border-radius: 8px; font-size: 17px; font-weight: 400; margin: 8px 0; cursor: pointer; transition: all 0.4s ease;}
+        .k2-copy-button:hover{background: #2ECC71;}
+        @media (max-width: 480px) {#k2button{width: 100%;}}
+        </style>
+        
+        
+        <script>
+          function copyFunction() {
+          const copyText = document.getElementById("myInput").textContent;
+          const textArea = document.createElement('textarea');
+          textArea.textContent = copyText;
+          document.body.append(textArea);
+          textArea.select();
+          document.execCommand("copy");
+          k2button.innerText = "Text copied";
+            textArea.remove();
+        }
+        document.getElementById('k2button').addEventListener('click', copyFunction);
+          </script>
+        
+    </head>
+    <h2>SERVER OUTPUT
+        [root@localhost ~]# vi fifo_server.c
+        [root@localhost ~]# cc -o fifo_server fifo_server.c
+         
+        [root@localhost ~]# ./fifo_serverWaiting for connection Request...Connection Established...Client has requested file dvr.c
+        [root@localhost ~]#
+    </h2>
+        <h3>
+        CLIENTOUTPUT
+        [root@localhost ~]# vi fifo_client.c
+        [root@localhost ~]# cc -o fifo_client fifo_client.c
+        [root@localhost ~]# ./fifo_clientTrying to Connect to Server...Connected...
+        Enter the filename to request from server: dvr.c
+        Waiting for Server to reply...
+         
+        </h3>
+</html>
+
+
+
+<html>
+    <h1>
+        part b :4 full duplex
+    </h1>
+    <head>
+        <blockquote id="myInput">#include "ns3/core-module.h"
+            #include "ns3/network-module.h"
+            #include "ns3/internet-module.h"
+            #include   "ns3/point-to-point-module.h"
+            #include   "ns3/applications-module.h"
+            #include "ns3/netanim-module.h"
+            // Default Network Topology
+            //
+            // 10.1.1.0
+            // n0	n1
+            // point-to-point
+            //
+            using namespace ns3;
+            NS_LOG_COMPONENT_DEFINE    ("FirstScriptExample");
+            int
+            main (int argc, char *argv[])
+            {
+            //CommandLine cmd (__FILE__);
+            //cmd.Parse (argc, argv);
+            bool tracing = true;
+            Time::SetResolution (Time::NS);
+            LogComponentEnable   ("UdpEchoClientApplication",   LOG_LEVEL_INFO);
+            LogComponentEnable   ("UdpEchoServerApplication",   LOG_LEVEL_INFO);
+            NodeContainer nodes;
+            nodes.Create (2);
+            PointToPointHelper pointToPoint;
+            pointToPoint.SetDeviceAttribute ("DataRate", StringValue ("10Mbps"));
+            pointToPoint.SetChannelAttribute ("Delay", StringValue ("2ms"));
+            NetDeviceContainer devices;
+            devices = pointToPoint.Install (nodes);
+            InternetStackHelper stack;
+            stack.Install (nodes);
+            Ipv4AddressHelper address;
+            address.SetBase ("10.1.1.0", "255.255.255.0");
+            Ipv4InterfaceContainer interfaces = address.Assign   (devices);
+            UdpEchoServerHelper echoServer (9);
+            ApplicationContainer serverApps = echoServer.Install (nodes.Get (1));
+            serverApps.Start (Seconds (1.0));
+            serverApps.Stop (Seconds (10.0));
+            UdpEchoClientHelper echoClient (interfaces.GetAddress (1), 9);
+            echoClient.SetAttribute ("MaxPackets", UintegerValue (4));
+            echoClient.SetAttribute  ("Interval", TimeValue (Seconds (1.0)));
+            echoClient.SetAttribute ("PacketSize", UintegerValue (1024));
+            ApplicationContainer clientApps = echoClient.Install (nodes.Get (0));
+            clientApps.Start (Seconds (2.0));
+            clientApps.Stop (Seconds (10.0));
+            AnimationInterface anim("1.xml");
+            anim.SetConstantPosition(nodes.Get (0), 10.0, 10.0);
+            anim.SetConstantPosition(nodes.Get (1), 20.0, 30.0);
+            if (tracing==true)
+            {
+            pointToPoint.EnablePcapAll("p2p");
+            }
+            
+            Simulator::Run ();
+            Simulator::Destroy ();
+            return 0;
+            }
+            
+        </blockquote>
+        
+        <button class="k2-copy-button" id="k2button"><svg aria-hidden="true" height="1em" preserveaspectratio="xMidYMid meet" role="img" viewbox="0 0 24 24" width="1em" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g fill="none"><path d="M13 6.75V2H8.75A2.25 2.25 0 0 0 6.5 4.25v13a2.25 2.25 0 0 0 2.25 2.25h9A2.25 2.25 0 0 0 20 17.25V9h-4.75A2.25 2.25 0 0 1 13 6.75z" fill="currentColor"><path d="M14.5 6.75V2.5l5 5h-4.25a.75.75 0 0 1-.75-.75z" fill="currentColor"><path d="M5.503 4.627A2.251 2.251 0 0 0 4 6.75v10.504a4.75 4.75 0 0 0 4.75 4.75h6.494c.98 0 1.813-.626 2.122-1.5H8.75a3.25 3.25 0 0 1-3.25-3.25l.003-12.627z" fill="currentColor"></path></path></path></g></svg>Copy</button>  
+        
+        
+        <style>
+        .k2-copy-button svg{margin-right: 10px;vertical-align: top;}  
+        .k2-copy-button{
+          height: 45px; width: 155px; color: #fff; background: #265df2; outline: none; border: none; border-radius: 8px; font-size: 17px; font-weight: 400; margin: 8px 0; cursor: pointer; transition: all 0.4s ease;}
+        .k2-copy-button:hover{background: #2ECC71;}
+        @media (max-width: 480px) {#k2button{width: 100%;}}
+        </style>
+        
+        
+        <script>
+          function copyFunction() {
+          const copyText = document.getElementById("myInput").textContent;
+          const textArea = document.createElement('textarea');
+          textArea.textContent = copyText;
+          document.body.append(textArea);
+          textArea.select();
+          document.execCommand("copy");
+          k2button.innerText = "Text copied";
+            textArea.remove();
+        }
+        document.getElementById('k2button').addEventListener('click', copyFunction);
+          </script>
+
+
+    </head>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
